@@ -3,6 +3,12 @@
 
 using namespace std;
 
+	/*============================================
+     *	Variable que determina el estado del gestor (Sincrono = false | asincrono = true)
+    =============================================*/
+
+bool estado = false;
+
 int menu()
 {
     int opcion;
@@ -24,7 +30,7 @@ int menu()
         break;
     case 1:
         /*============================================
-                    Follow de un usuario
+         *          Follow de un usuario
         =============================================*/
         cout<<"A chi ti piacerebbe seguire?"<<endl;
 
@@ -66,6 +72,42 @@ int menu()
     return opcion;
 }
 
+/*void EnviarPipe(emple *miemp, int cuantos,char pipe[]) {
+
+  int i, creado, fd;
+ do{
+	fd = open (pipe, O_WRONLY);
+	if(fd==-1)
+		sleep(1);
+ }while(fd==-1);
+	 	for(i=0; i<cuantos; ++i)
+		{
+		 	write(fd, &miemp[i], sizeof (miemp[i]));
+		}	
+	
+	sleep(3);
+	close(fd);
+
+}*/
+
+   /*============================================
+    *     Verifica si el usuario es valido = true
+    =============================================*/
+bool verifUsuario(int pid)
+{
+	int i, creado, fd;
+    
+    do{
+		fd = open (pipe, O_WRONLY);
+		if(fd==-1)
+			sleep(1);
+    }while(fd==-1);
+ 	
+	
+	sleep(3);
+	close(fd);
+}
+
 int main(int argc, char *argv[])
 {
     /*============================================
@@ -77,8 +119,9 @@ int main(int argc, char *argv[])
         cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
         exit(0);
     }
+    
     /*============================================
-                  VERIFICACION ID
+                  VERIFICACION USUARIO
     =============================================*/
 
 
