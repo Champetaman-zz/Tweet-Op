@@ -3,10 +3,9 @@
 
 using namespace std;
 
-	/*============================================
-     *	Variable que determina el estado del gestor (Sincrono = false | asincrono = true)
-    =============================================*/
-
+/*======================================================================================
+ *	Variable que determina el estado del gestor (Sincrono = false | asincrono = true)
+  ======================================================================================*/
 bool estado = false;
 
 int menu()
@@ -28,6 +27,7 @@ int menu()
         cout<<"Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
         return 0;
         break;
+        
     case 1:
         /*============================================
          *          Follow de un usuario
@@ -36,6 +36,7 @@ int menu()
 
         return 1;
         break;
+        
     case 2:
         /*============================================
                     Unfollow de un usuario
@@ -45,6 +46,7 @@ int menu()
 
         return 2;
         break;
+        
     case 3:
         /*============================================
                         Enviar un Tweet
@@ -53,6 +55,7 @@ int menu()
 
         return 3;
         break;
+        
     case 4:
         /*============================================
                         Recuperar Tweets
@@ -62,6 +65,7 @@ int menu()
 
         return 4;
         break;
+        
     default:
         cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu.";
         break;
@@ -103,22 +107,22 @@ bool verifUsuario(int pid)
 			sleep(1);
     }while(fd==-1);
  	
-	
 	sleep(3);
+	
 	close(fd);
 }
 
 int main(int argc, char *argv[])
 {
-    /*============================================
+    /*=============================================
          Verificación de parámetros correctos
-    =============================================*/
-
+    ===============================================*/
+    /*
     if(argc!=3)
     {
         cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
         exit(0);
-    }
+    }*/
     
     /*============================================
                   VERIFICACION USUARIO

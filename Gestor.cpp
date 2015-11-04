@@ -6,9 +6,8 @@
 
 using namespace std;
 
-
 /*===========================================
- *  DATOSCLIENTE
+ *  Estructura DATOSCLIENTE
  * 
  * pid-> id usuario
  * follow-> (usuario, ultimo tweet)
@@ -21,6 +20,9 @@ struct datosCliente
     vector<string> tweet;
 };
 
+/*===========================================
+ * 		Lectura del archivo Relaciones
+ * =========================================*/
 void lectura(vector< datosCliente > &g,string nom)
 {
 	ifstream archivo (nom.c_str());
@@ -47,23 +49,7 @@ int main(int argc, char *argv[])
 {
 
     vector< datosCliente> g;
-    for(int i=0; i<10 ;++i)
-    {
-		datosCliente dc;
-		dc.pid=i;
-		g.push_back(dc);
-	}
-	
-	mode_t fifo_mode = S_IRUSR | S_IWUSR;
-  
-	unlink(argv[1]);
-	if (mkfifo (argv[1], fifo_mode) == -1) 
-	{
-		 perror("mkfifo");
-		 exit(1);
-	}
-    sleep(5);
-
+    
     /*============================================
          Verificación de parámetros correctos
     =============================================*/
@@ -74,10 +60,17 @@ int main(int argc, char *argv[])
         exit(0);
     }*/
     
-     /*============================================
+    for(int i=0; i<10 ;++i)
+    {
+		datosCliente dc;
+		dc.pid = i;
+		g.push_back(dc);
+	}
+	
+	/*============================================
 				Lectura de datos usuario
     =============================================*/
-    cout<<" ";
+    cout<<" Bienvenido al Gestor de Tu&Tazo."<<endl;
 	cout<<"Lectura del archivo de Relaciones... ";
     lectura(g,argv[1]);
     cout<<"100%"<<endl;
@@ -93,8 +86,22 @@ int main(int argc, char *argv[])
 			cout<<endl;
 
 	}
-*/}
-    
+  */}	
+	/*============================================
+	 * 		Codigo para leer pipe desde cliente
+	 * ===========================================*/
+	
+	mode_t fifo_mode = S_IRUSR | S_IWUSR;
+  
+	unlink(argv[3]);
+	
+	if (mkfifo (argv[3], fifo_mode) == -1) 
+	{
+		 perror("mkfifo");
+		 exit(1);
+	}
+    sleep(5);
+ 
     fd = open (argv[1], O_RDONLY);
     printf ("Abrio el pipe\n");
 
@@ -103,6 +110,7 @@ int main(int argc, char *argv[])
 
   while(read(fd, &em, sizeof(emple))>0)
   {
+  }
     
     return 0;
 }
