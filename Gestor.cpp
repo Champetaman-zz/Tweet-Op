@@ -3,22 +3,9 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include "datosCliente.h"
 
 using namespace std;
-
-/*===========================================
- *  Estructura DATOSCLIENTE
- * 
- * pid-> id usuario
- * follow-> (usuario, ultimo tweet)
- * tweet -> guarda los tweets del usuario
- =============================================*/
-struct datosCliente
-{
-    int pid;
-    map<int, int> follow;
-    vector<string> tweet;
-};
 
 /*===========================================
  * 		Lectura del archivo Relaciones
@@ -29,10 +16,10 @@ void lectura(vector< datosCliente > &g,string nom)
     int x, cont=0, cont2=0, i=0;
     while(archivo>>x)
     {
-		
+
 		if(x==1)
 		{
-			g[cont2].follow[cont]=0;	
+			g[cont2].follow[cont]=0;
 			++i;
 		}
 		++cont;
@@ -48,8 +35,8 @@ void lectura(vector< datosCliente > &g,string nom)
 int main(int argc, char *argv[])
 {
 
-    vector< datosCliente> g;
-    
+    vector< datosCliente > g;
+
     /*============================================
          Verificación de parámetros correctos
     =============================================*/
@@ -59,14 +46,14 @@ int main(int argc, char *argv[])
         cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
         exit(0);
     }*/
-    
+
     for(int i=0; i<10 ;++i)
     {
 		datosCliente dc;
 		dc.pid = i;
 		g.push_back(dc);
 	}
-	
+
 	/*============================================
 				Lectura de datos usuario
     =============================================*/
@@ -86,31 +73,31 @@ int main(int argc, char *argv[])
 			cout<<endl;
 
 	}
-  */}	
+  */}
 	/*============================================
 	 * 		Codigo para leer pipe desde cliente
 	 * ===========================================*/
-	
+
 	mode_t fifo_mode = S_IRUSR | S_IWUSR;
-  
+
 	unlink(argv[3]);
-	
-	if (mkfifo (argv[3], fifo_mode) == -1) 
+
+	if (mkfifo (argv[3], fifo_mode) == -1)
 	{
 		 perror("mkfifo");
 		 exit(1);
 	}
     sleep(5);
- 
+
     fd = open (argv[1], O_RDONLY);
     printf ("Abrio el pipe\n");
 
 
-    // Aqui va el codigo de lectura de la informacion por el pipe. 
+    // Aqui va el codigo de lectura de la informacion por el pipe.
 
   while(read(fd, &em, sizeof(emple))>0)
   {
   }
-    
+
     return 0;
 }

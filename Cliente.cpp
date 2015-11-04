@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cstdlib>
+#include <map>
+#include <vector>
+#include "datosCliente.h"
 
 using namespace std;
 
@@ -27,7 +30,7 @@ int menu()
         cout<<"Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
         return 0;
         break;
-        
+
     case 1:
         /*============================================
          *          Follow de un usuario
@@ -36,7 +39,7 @@ int menu()
 
         return 1;
         break;
-        
+
     case 2:
         /*============================================
                     Unfollow de un usuario
@@ -46,16 +49,21 @@ int menu()
 
         return 2;
         break;
-        
+
     case 3:
         /*============================================
                         Enviar un Tweet
         =============================================*/
+        char cadena[140];
+
         cout<<"A cosa stai pensando?"<<endl;
+        cin>>cadena;
+        miemp[i].tweet.push_back(cadena);
+        ++i;
 
         return 3;
         break;
-        
+
     case 4:
         /*============================================
                         Recuperar Tweets
@@ -65,7 +73,7 @@ int menu()
 
         return 4;
         break;
-        
+
     default:
         cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu.";
         break;
@@ -76,44 +84,28 @@ int menu()
     return opcion;
 }
 
-/*void EnviarPipe(emple *miemp, int cuantos,char pipe[]) {
-
-  int i, creado, fd;
- do{
-	fd = open (pipe, O_WRONLY);
-	if(fd==-1)
-		sleep(1);
- }while(fd==-1);
-	 	for(i=0; i<cuantos; ++i)
-		{
-		 	write(fd, &miemp[i], sizeof (miemp[i]));
-		}	
-	
-	sleep(3);
-	close(fd);
-
-}*/
-
    /*============================================
     *     Verifica si el usuario es valido = true
     =============================================*/
-bool verifUsuario(int pid)
+/*bool verifUsuario(int pid)
 {
 	int i, creado, fd;
-    
+
     do{
 		fd = open (pipe, O_WRONLY);
 		if(fd==-1)
 			sleep(1);
     }while(fd==-1);
- 	
+
 	sleep(3);
-	
+
 	close(fd);
-}
+}*/
 
 int main(int argc, char *argv[])
 {
+    client miemp[MAXEMP];
+    int i=0;
     /*=============================================
          Verificación de parámetros correctos
     ===============================================*/
@@ -123,16 +115,15 @@ int main(int argc, char *argv[])
         cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
         exit(0);
     }*/
-    
-    /*============================================
-                  VERIFICACION USUARIO
-    =============================================*/
-
 
     /*============================================
                     SECCION ID
     =============================================*/
     while(menu());
+
+    /*============================================
+                  VERIFICACION USUARIO
+    =============================================*/
 
     return 0;
 }
