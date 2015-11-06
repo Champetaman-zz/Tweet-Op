@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 								   Lectura de datos usuario
 								   =============================================*/
 								cout<<" Bienvenido al Gestor de Tu&Tazo."<<endl;
-								cout<<"Lectura del archivo de Relaciones... ";
+								cout<<"Lectura del archivo de Relaciones...        ";
 								lectura(g,argv[1]);
 								cout<<"100%"<<endl;
 								{/*

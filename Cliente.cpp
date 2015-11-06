@@ -20,6 +20,9 @@ int menu()
 {
         int i=0;
         int opcion;
+
+        int ide;
+
         dataClient client;
 
         cout<<"=====================Tu&tazo Inc.====================="<<endl;
@@ -35,8 +38,9 @@ int menu()
         switch(opcion)
         {
         case 0:
-        {
-                cout<<"Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
+        {       cout<<"--------->Cerrando Sesion...        ";
+                cout<<"100%"<<endl;
+                cout<<"--------->Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
                 return 0;
         } break;
 
@@ -46,17 +50,23 @@ int menu()
                  *          Follow de un usuario
                    =============================================*/
                 cout<<"A chi ti piacerebbe seguire?"<<endl;
+                cin>>ide;
+                //Se debe validar que el usuario sea valido y no lo este siguiendo
+                cout<<endl;
 
                 return 1;
         } break;
 
         case 2:
         {
+
                 /*============================================
                             Unfollow de un usuario
                    =============================================*/
-                cout<<"A chi ti piacerebbe non seguire?"<<endl;
-
+                cout<<"A chi ti piacerebbe lasciare di seguire?"<<endl;
+                cin>>ide;
+                // Se debe validar que el usuario sea valido y lo este siguiendo
+                cout<<endl;
 
                 return 2;
         } break;
@@ -66,14 +76,15 @@ int menu()
                 /*============================================
                                 Enviar un Tweet
                    =============================================*/
-                string cadena;
-                char x;
-                bool flag = false;
+                string input;
 
                 cout<<"A cosa stai pensando?"<<endl;
-                cin>>cadena;
-                client[i].tweet.push_back(cadena);
+                getline(cin,input);
+                cout << input << ": "<<endl;
+                client[i].tweet.push_back(input);
                 ++i;
+
+                cout<<endl;
 
                 return 3;
         } break;
@@ -83,15 +94,16 @@ int menu()
                 /*============================================
                                 Recuperar Tweets
                    =============================================*/
-                cout<<"aggiornare il muro"<<endl;
-
+                cout<<"aggiornare il muro? Y | N"<<endl;
+                //Se valida si el gestor esta en modo sincrono
 
                 return 4;
         } break;
 
         default:
         {
-                cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu.";
+                cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
+                cout<<endl;
         } break;
 
 
@@ -134,8 +146,8 @@ int main(int argc, char *argv[])
                          VERIFICACION USUARIO
               =============================================*/
         //Se verifica si el id ya esta conectado al gestor
-        cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
-        cout<<"Intente con uno de los siguientes usuarios disponibles: "<<endl;
+        //cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
+        //cout<<"Intente con uno de los siguientes usuarios disponibles: "<<endl;
         // Se desplegara los usuarios aun disponibles
 
         /*============================================
