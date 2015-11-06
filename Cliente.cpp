@@ -2,13 +2,18 @@
 #include <cstdlib>
 #include <map>
 #include <vector>
+#include <limits>
+#include <fstream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 #include <fcntl.h>
-#include <limits>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "datosCliente.h"
+
+datosCliente usuario;
 
 using namespace std;
 
@@ -18,14 +23,32 @@ using namespace std;
 bool estado = false;
 
 /*NOS FALTA QUE CUANDO EL GESTOR NOS RESPONDA SABER SI ESTA SINCRONICO O
-ASINCRONICO Y MOSTRAR LA OPCION 4 O NO*/
+   ASINCRONICO Y MOSTRAR LA OPCION 4 O NO*/
 
-int menu(int opciones)
+void EnviarPeticion(datosCliente usuario,char pipe[]) {
+
+        int i, creado, fd;
+        // este código lo tienen que hacer Uds.
+        do {
+                fd = open (pipe, O_WRONLY);
+                if(fd == -1)
+
+                        sleep(1);
+        } while(fd == -1);
+
+        for(i=0; i<5; ++i)
+        {
+                write(fd, &usuario, sizeof(datosCliente));
+        }
+
+        sleep(3);
+        close(fd);
+}
+
+int menu(int opciones, char *pipe_name, datosCliente &usuario)
 {
         int i=0;
         int opcion;
-
-        dataClient client;
 
         cout<<"=====================Tu&tazo Inc.====================="<<endl;
         cout<<"Ciao, per favore fate la tua scelta:"<<endl;
@@ -84,13 +107,13 @@ int menu(int opciones)
 
                 do {
                         cout<<"A cosa stai pensando?"<<endl;
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cin.ignore();
                         getline(cin,input);
                         if(input.length() <= 140)
                         {
-                                client[i].tweet.push_back(input);
+                                usuario.tweet.push_back(input);
                                 ++i;
+                                EnviarPeticion(usuario, pipe_name);
                                 cout<<"Tweet enviado exitosamente!"<<endl;
                                 caracter = 'N';
                         }
@@ -132,28 +155,12 @@ int menu(int opciones)
         return opcion;
 }
 
-/*============================================
- *     Verifica si el usuario es valido = true
-   =============================================*/
-/*bool verifUsuario(int pid)
-   {
-   int i, creado, fd;
-
-   do{
-   fd = open (pipe, O_WRONLY);
-   if(fd==-1)
-   sleep(1);
-   }while(fd==-1);
-
-   sleep(3);
-
-   close(fd);
-   }*/
-
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
         char *p;
-        int opciones;
+        int opciones = 0;
+        datosCliente user;
+
         /*=============================================
            Verificación de parámetros correctos
            ===============================================*/
@@ -164,24 +171,22 @@ int main(int argc, char *argv[])
            exit(0);
            }*/
 
-/*============================================
-   VERIFICACION USUARIO
-   =============================================*/
-//Se verifica si el id ya esta conectado al gestor
-/*if(strtol(argv[1], &p, 10) < 1 || strtol(argv[1], &p, 10) > 10)
-   {
-   cout << "No es posible conectarse con el id que indica, Por favor ingrese un numero entre 1 y 10." <<endl;
-   }*/
-//cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
-//cout<<"Intente con uno de los siguientes usuarios disponibles: "<<endl;
-// Se desplegara los usuarios aun disponibles
+        /*============================================
+           VERIFICACION USUARIO
+           =============================================*/
+        //Se verifica si el id ya esta conectado al gestor
+        /*if(strtol(argv[1], &p, 10) < 1 || strtol(argv[1], &p, 10) > 10)
+           {
+           cout << "No es posible conectarse con el id que indica, Por favor ingrese un numero entre 1 y 10." <<endl;
+           }*/
+        //cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
+        //cout<<"Intente con uno de los siguientes usuarios disponibles: "<<endl;
+        // Se desplegara los usuarios aun disponibles
 
-/*============================================
-   SECCION ID
-   =============================================*/
-        while(menu());
-
-
+        /*============================================
+           SECCION ID
+           =============================================*/
+        while(menu(opciones, argv[2], user));
 
         return 0;
 }
