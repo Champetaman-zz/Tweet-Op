@@ -17,7 +17,10 @@ using namespace std;
    ======================================================================================*/
 bool estado = false;
 
-int menu()
+/*NOS FALTA QUE CUANDO EL GESTOR NOS RESPONDA SABER SI ESTA SINCRONICO O
+ASINCRONICO Y MOSTRAR LA OPCION 4 O NO*/
+
+int menu(int opciones)
 {
         int i=0;
         int opcion;
@@ -26,10 +29,11 @@ int menu()
 
         cout<<"=====================Tu&tazo Inc.====================="<<endl;
         cout<<"Ciao, per favore fate la tua scelta:"<<endl;
-        cout<<"1. Follow un usuario"<<endl;
-        cout<<"2. Unfollow un usuario"<<endl;
-        cout<<"3. Enviar un tweet"<<endl;
-        cout<<"4. Recuperar Tweets (Valido unicamente en modo sincrono)"<<endl;
+        cout<<"1. Seguire un utente"<<endl;
+        cout<<"2. Smetti di seguire un utente"<<endl;
+        cout<<"3. Inviare un tweet"<<endl;
+        if( opciones > 3 )
+                cout<<"4. Aggiornare Tweets "<<endl;
         cout<<"0. Cerrar Sesion"<<endl;
 
         cin>>opcion;
@@ -104,6 +108,9 @@ int menu()
 
         case 4:
         {
+                if( opciones <= 3 )
+                        cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
+
                 /*============================================
                    Recuperar Tweets
                    =============================================*/
@@ -146,6 +153,7 @@ int menu()
 int main(int argc, char *argv[])
 {
         char *p;
+        int opciones;
         /*=============================================
            Verificación de parámetros correctos
            ===============================================*/
@@ -171,7 +179,7 @@ int main(int argc, char *argv[])
 /*============================================
    SECCION ID
    =============================================*/
-        while(menu()) ;
+        while(menu());
 
 
 

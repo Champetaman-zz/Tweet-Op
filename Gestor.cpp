@@ -1,44 +1,67 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <unistd.h>
 #include <iostream>
-#include <cstdlib>
+#include <vector>
+#include <map>
+#include <fstream>
 #include "datosCliente.h"
+#include "empleados.h"
 
 using namespace std;
 
-/*===========================================
-*   Lectura del archivo Relaciones
-* =========================================*/
+void lectura(vector< datosCliente > &g,string nom)
+{
+	ifstream archivo (nom.c_str());
+    int x, cont=0, cont2=0, i=0;
+    while(archivo>>x)
+    {
 
+		if(x==1)
+		{
+			g[cont2].follow[cont]=0;
+			++i;
+		}
+		++cont;
+		if(cont==10)
+		{
+			cont=0;
+			++cont2;
+		}
+    }
+    archivo.close();
+}
 
-int main(int argc, char *argv[])
+int main (int argc, char **argv)
 {
 
-								/*============================================
-								     Verificación de parámetros correctos
-								   =============================================*/
+  int fd, pid, n, bytes;
 
-								/*if(argc!=4)
-								   {
-								    cout<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
-								    exit(0);
-								   }*/
+	vector< datosCliente> g;
+    for(int i=0; i<10 ;++i)
+    {
+		datosCliente dc;
+		dc.pid=i;
+		g.push_back(dc);
+	}
 
-								/*============================================
-								   Lectura de datos usuario
-								   =============================================*/
+  mode_t fifo_mode = S_IRUSR | S_IWUSR;
 
-								/*
-								     cout<<"He aqui el grafo: "<<g.size()<<endl;
-								     for(unsigned int i=0; i<g.size();++i)
-								     {
-								     map<int, int> :: iterator it=g[i].follow.begin();
-								     for(; it!=g[i].follow.end(); ++it)
-								     {
-								     cout<<i<<"->"<<it->first<<endl;
-								     }
-								     cout<<endl;
+  unlink(argv[1]);
+  if (mkfifo (argv[1], fifo_mode) == -1) {
+     perror("mkfifo");
+     exit(1);
+  }
 
-								     }
-								 */
+  sleep(5);
 
-								return 0;
+  fd = open (argv[1], O_RDONLY);
+  printf ("Abrio el pipe\n");
+
+    
+ close(fd);
 }
