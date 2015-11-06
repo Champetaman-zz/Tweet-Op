@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <limits>
 #include <stdio.h>
 #include <string.h>
 #include "datosCliente.h"
@@ -21,8 +22,6 @@ int menu()
         int i=0;
         int opcion;
 
-        int ide;
-
         dataClient client;
 
         cout<<"=====================Tu&tazo Inc.====================="<<endl;
@@ -38,14 +37,14 @@ int menu()
         switch(opcion)
         {
         case 0:
-        {       cout<<"--------->Cerrando Sesion...        ";
+        {       cout<<"--------->Cerrando Sesion...  ";
                 cout<<"100%"<<endl;
                 cout<<"--------->Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
-                return 0;
-        } break;
+                return 0; } break;
 
         case 1:
         {
+                int ide;
                 /*============================================
                  *          Follow de un usuario
                    =============================================*/
@@ -59,9 +58,9 @@ int menu()
 
         case 2:
         {
-
+                int ide;
                 /*============================================
-                            Unfollow de un usuario
+                   Unfollow de un usuario
                    =============================================*/
                 cout<<"A chi ti piacerebbe lasciare di seguire?"<<endl;
                 cin>>ide;
@@ -74,17 +73,31 @@ int menu()
         case 3:
         {
                 /*============================================
-                                Enviar un Tweet
+                   Enviar un Tweet
                    =============================================*/
                 string input;
+                char caracter;
 
-                cout<<"A cosa stai pensando?"<<endl;
-                getline(cin,input);
-                cout << input << ": "<<endl;
-                client[i].tweet.push_back(input);
-                ++i;
-
-                cout<<endl;
+                do {
+                        cout<<"A cosa stai pensando?"<<endl;
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        getline(cin,input);
+                        if(input.length() <= 140)
+                        {
+                                client[i].tweet.push_back(input);
+                                ++i;
+                                cout<<"Tweet enviado exitosamente!"<<endl;
+                                caracter = 'N';
+                        }
+                        else
+                        {
+                                cout<<endl<<"El tweet es demasiado largo, excede los 140 caracteres."<<endl;
+                                cout<<"Numero de caracteres: "<<input.length()<<endl;
+                                cout << "Si desea cancelar ingrese N, si desea reescribir el tweet ingrese S" <<endl;
+                                cin>>caracter;
+                        }
+                } while(caracter == 'S' || caracter == 's');
 
                 return 3;
         } break;
@@ -92,7 +105,7 @@ int menu()
         case 4:
         {
                 /*============================================
-                                Recuperar Tweets
+                   Recuperar Tweets
                    =============================================*/
                 cout<<"aggiornare il muro? Y | N"<<endl;
                 //Se valida si el gestor esta en modo sincrono
@@ -119,11 +132,11 @@ int menu()
    {
    int i, creado, fd;
 
-    do{
-    fd = open (pipe, O_WRONLY);
-    if(fd==-1)
-      sleep(1);
-    }while(fd==-1);
+   do{
+   fd = open (pipe, O_WRONLY);
+   if(fd==-1)
+   sleep(1);
+   }while(fd==-1);
 
    sleep(3);
 
@@ -132,28 +145,33 @@ int menu()
 
 int main(int argc, char *argv[])
 {
+        char *p;
         /*=============================================
-             Verificación de parámetros correctos
+           Verificación de parámetros correctos
            ===============================================*/
         /*
            if(argc!=3)
            {
-            cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
-            exit(0);
+           cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
+           exit(0);
            }*/
 
-        /*============================================
-                         VERIFICACION USUARIO
-              =============================================*/
-        //Se verifica si el id ya esta conectado al gestor
-        //cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
-        //cout<<"Intente con uno de los siguientes usuarios disponibles: "<<endl;
-        // Se desplegara los usuarios aun disponibles
+/*============================================
+   VERIFICACION USUARIO
+   =============================================*/
+//Se verifica si el id ya esta conectado al gestor
+/*if(strtol(argv[1], &p, 10) < 1 || strtol(argv[1], &p, 10) > 10)
+   {
+   cout << "No es posible conectarse con el id que indica, Por favor ingrese un numero entre 1 y 10." <<endl;
+   }*/
+//cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
+//cout<<"Intente con uno de los siguientes usuarios disponibles: "<<endl;
+// Se desplegara los usuarios aun disponibles
 
-        /*============================================
-                        SECCION ID
-           =============================================*/
-        while(menu());
+/*============================================
+   SECCION ID
+   =============================================*/
+        while(menu()) ;
 
 
 
