@@ -29,4 +29,10 @@ struct datosCliente
         vector< string > tweet;
 };
 
+
+struct datosEnvio
+{
+
+};
+
 #endif

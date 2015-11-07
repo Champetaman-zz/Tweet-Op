@@ -27,7 +27,7 @@ bool estado = false;
 
 void EnviarPeticion(datosCliente usuario,char pipe[]) {
 
-        int i, creado, fd;
+        int i=1, creado, fd;
         // este código lo tienen que hacer Uds.
         do {
                 fd = open (pipe, O_WRONLY);
@@ -38,7 +38,8 @@ void EnviarPeticion(datosCliente usuario,char pipe[]) {
 
         for(i=0; i<5; ++i)
         {
-                write(fd, &usuario, sizeof(datosCliente));
+
+                write(fd, &i, sizeof(i));
         }
 
         sleep(3);
