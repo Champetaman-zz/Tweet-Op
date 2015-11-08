@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 
 using namespace std;
@@ -30,9 +31,5 @@ struct datosCliente
 };
 
 
-struct datosEnvio
-{
-
-};
 
 #endif
