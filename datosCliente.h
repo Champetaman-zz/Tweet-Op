@@ -10,12 +10,14 @@
 #include <unistd.h>
 #include <iostream>
 #include <map>
+#include <set>
+#include <string.h>
 #include <vector>
 #include <fstream>
 #include <sstream>
 
-
 using namespace std;
+
 /*===========================================
  *  Estructura DATOSCLIENTE
  *
@@ -30,6 +32,20 @@ struct datosCliente
         vector< string > tweet;
 };
 
+struct datosEnvio
+{
+        int action;
+        int id;
+        int pid;
+        char pipename[1000];
+        char message[1000];
+};
 
+typedef void (*sighandler_t)(int);
+
+sighandler_t signalHandler (void)
+{
+        cout<<"Estoy en el handler"<<endl;
+}
 
 #endif
