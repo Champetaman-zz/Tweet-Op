@@ -1,7 +1,8 @@
 #include "datosCliente.h"
 
+vector< int > pipeVector;
 
-void datosEntrada( datosEnvio opcion, vector<datosCliente>  dc, string mode, set< int > conectados)
+void datosEntrada( datosEnvio opcion, vector<datosCliente>  &dc, string mode, set< int > &conectados)
 {
 								int decizione = opcion.action;
 								datosEnvio dE;
@@ -10,14 +11,20 @@ void datosEntrada( datosEnvio opcion, vector<datosCliente>  dc, string mode, set
 								{
 								case -1:
 								{
-																cout<<"**Gestor evaluando sesion de "<<opcion.id<<endl;
+																cout<<"**Gestor evaluando sesion de cliente: "<<opcion.id<<endl;
 																int pipeC, verificar = 0;
-																if(conectados.find(opcion.id) == conectados.end()) {
+																if(conectados.find(opcion.id) == conectados.end())
+																{
 																								verificar = 1;
 																								strcpy(dE.message,mode.c_str() );
 																								conectados.insert(opcion.id);
+																								dE.action = verificar;
 																}
-																dE.action = verificar;
+																else
+																{
+																								strcpy(dE.message,mode.c_str() );
+																								dE.action = 0;
+																}
 
 																if ((pipeC = open(opcion.pipename, O_WRONLY|O_NONBLOCK)) == -1) {
 																								perror("Gestor Abriendo el pipe de respuesta");
@@ -31,7 +38,6 @@ void datosEntrada( datosEnvio opcion, vector<datosCliente>  dc, string mode, set
 																								exit(0);
 																}
 
-																cout<<"termina\n";
 								} break;
 
 								default:
@@ -41,7 +47,6 @@ void datosEntrada( datosEnvio opcion, vector<datosCliente>  dc, string mode, set
 
 
 								}
-								cout<<"sale"<<endl;
 }
 
 
@@ -133,8 +138,8 @@ int main (int argc, char **argv)
 
 																								datosEntrada(dRecibido, datos, modo, conectados);
 																}
-																sleep(5);
-																cout<<"llega\n";
+																sleep(2);
+
 
 								}
 								cout<<aux<<endl;

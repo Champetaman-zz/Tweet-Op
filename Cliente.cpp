@@ -7,7 +7,9 @@
    y retorna el estado en el que está el gestor
    =============================================*/
 
-bool inicioSesion(int id, int pG, int pC, string pipeC) {
+int opciones = 1;
+
+void inicioSesion(int id, int pG, int pC, string pipeC) {
         int c;
         cout<<"..Iniciando sesion.................."<<endl;
 
@@ -25,17 +27,21 @@ bool inicioSesion(int id, int pG, int pC, string pipeC) {
         do {
                 c =  read(pC, &dLectura, sizeof(dLectura));
                 sleep(1);
-                cout<<" c es "<<c<<endl;
         } while (c <= 0);
 
         /*if(read(pC, &dLectura, sizeof(dLectura))==-1){
            perror("Lectura inicio de sesión");
            exit(0);
            }*/
-        cout<<"Modo R="<<dLectura.action<<" Mensaje R="<<dLectura.message<<endl;
-        cout<<": El gestor responde... \n";
-        if(dLectura.action==0)
+        if(dLectura.message == "asincrono")
+                opciones = 0;
+
+        cout<<"Modo del Gestor= "<<dLectura.action<<" Mensaje R= "<<dLectura.message<<endl;
+        cout<<"El gestor responde... \n";
+        if(dLectura.action==0){
                 cout<<"Alguien hackeo su cuenta, ya se encuentra abierta."<<endl;
+                exit(0);
+        }
         else if(dLectura.action==1) {
                 cout<<"Ha iniciado sesion correctamente!"<<endl;
                 cout<<"El servidor se encuentra en estado: "<<dLectura.message<<endl;
@@ -47,17 +53,22 @@ int menu(int opciones, int fdG, int fdC)
 {
         int i=0;
         int opcion;
+        datosCliente usuario;
 
-        cout<<"=====================Tu&tazo Inc.====================="<<endl;
-        cout<<"Ciao, per favore fate la tua scelta:"<<endl;
-        cout<<"1. Seguire un utente"<<endl;
-        cout<<"2. Smetti di seguire un utente"<<endl;
-        cout<<"3. Inviare un tweet"<<endl;
-        if( opciones > 3 )
-                cout<<"4. Aggiornare Tweets "<<endl;
-        cout<<"0. Cerrar Sesion"<<endl;
+        cout<<"   |-----------------------------------------------------|"<<endl;
+        cout<<"   |====================Tu&tazo Inc.=====================|"<<endl;
+        cout<<"   |Ciao, per favore fate la tua scelta.                 |"<<endl;
+        cout<<"   |1. Seguire un utente                                 |"<<endl;
+        cout<<"   |2. Smetti di seguire un utente                       |"<<endl;
+        cout<<"   |3. Inviare un tweet                                  |"<<endl;
+        if( opciones = 0 )
+                cout<<"   |4. Aggiornare I tweets                               |"<<endl;
+        cout<<"   |0. Esci di Tu&tazo                                   |"<<endl;
+        cout<<"   |-----------------------------------------------------|"<<endl;
+        cout<<"La tua opzione: ";
 
         cin>>opcion;
+        cout<<endl;
 
         switch(opcion)
         {
@@ -129,9 +140,11 @@ int menu(int opciones, int fdG, int fdC)
 
         case 4:
         {
-                if( opciones <= 3 )
+                if( opciones = 1 ) {
                         cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
-
+                        cout<<endl;
+                        return 4;
+                }
                 /*============================================
                    Recuperar Tweets
                    =============================================*/
@@ -213,13 +226,7 @@ int main(int argc, char **argv)
            Operaciones cliente
            =============================================*/
 
-        if(!inicioSesion(atoi(argv[1]),pipeG,pipeC,nompipeGC)) {
-                cout<<"Se ha iniciado sesion correctamente"<<endl;
-        }
-        else{
-                cout<<"El usuario con el que esta intentando ingresar ya esta conectado"<<endl;
-                exit(0);
-        }
+        inicioSesion(atoi(argv[1]),pipeG,pipeC,nompipeGC);
 
         do {
                 temp = menu(opciones, pipeG, pipeC);
