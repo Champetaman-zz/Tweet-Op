@@ -41,11 +41,5 @@ struct datosEnvio
         char message[1000];
 };
 
-typedef void (*sighandler_t)(int);
-
-sighandler_t signalHandler (void)
-{
-        cout<<"Estoy en el handler"<<endl;
-}
 
 #endif

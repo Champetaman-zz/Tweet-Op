@@ -1,238 +1,311 @@
 
 #include "datosCliente.h"
 
-/*============================================
-   --inicioSesio--
-   Se encarga de conectar al cliente, validarlo
-   y retorna el estado en el que está el gestor
-   =============================================*/
+typedef void (*sighandler_t)(int);
 
-int opciones = 1;
+int opciones = 0;
+
+sighandler_t signalHandler (void)
+{
+  
+}
+
+/*============================================
+--inicioSesio--
+Se encarga de conectar al cliente, validarlo
+y retorna el estado en el que está el gestor
+=============================================*/
+
+
 
 void inicioSesion(int id, int pG, int pC, string pipeC) {
-        int c;
-        cout<<"..Iniciando sesion.................."<<endl;
+  int c;
+  cout<<"..Iniciando sesion.................."<<endl;
 
-        datosEnvio dEscritura, dLectura;
-        dEscritura.action = -1;
-        dEscritura.id = id;
-        strcpy(dEscritura.pipename, pipeC.c_str());
-        cout<<": Enviando solicitud a gestor \n";
+  datosEnvio dEscritura, dLectura;
+  dEscritura.action = -1;
+  dEscritura.id = id;
+  strcpy(dEscritura.pipename, pipeC.c_str());
+  cout<<": Enviando solicitud a gestor \n";
 
-        if(write(pG, &dEscritura, sizeof(dEscritura))==-1) {
-                perror("Escritura inicio de sesión");
-                exit(0);
-        }
-        // Codigo agregado
-        do {
-                c =  read(pC, &dLectura, sizeof(dLectura));
-                sleep(1);
-        } while (c <= 0);
+  if(write(pG, &dEscritura, sizeof(dEscritura))==-1) {
+    perror("Escritura inicio de sesión");
+    exit(0);
+  }
+  // Codigo agregado
+  do {
+    c =  read(pC, &dLectura, sizeof(dLectura));
+    sleep(1);
+  } while (c <= 0);
 
-        /*if(read(pC, &dLectura, sizeof(dLectura))==-1){
-           perror("Lectura inicio de sesión");
-           exit(0);
-           }*/
-        if(dLectura.message == "asincrono")
-                opciones = 0;
 
-        cout<<"Modo del Gestor= "<<dLectura.action<<" Mensaje R= "<<dLectura.message<<endl;
-        cout<<"El gestor responde... \n";
-        if(dLectura.action==0){
-                cout<<"Alguien hackeo su cuenta, ya se encuentra abierta."<<endl;
-                exit(0);
-        }
-        else if(dLectura.action==1) {
-                cout<<"Ha iniciado sesion correctamente!"<<endl;
-                cout<<"El servidor se encuentra en estado: "<<dLectura.message<<endl;
-        }
+  if(dLectura.message == "asincrono")
+  opciones = 1;
+
+  cout<<"Modo del Gestor= "<<dLectura.action<<" Mensaje R= "<<dLectura.message<<endl;
+  cout<<"El gestor responde... \n";
+  if(dLectura.action==0){
+    cout<<"Alguien hackeo su cuenta, ya se encuentra abierta."<<endl;
+    exit(0);
+  }
+  else if(dLectura.action==1) {
+    cout<<"Ha iniciado sesion correctamente!"<<endl;
+    cout<<"El servidor se encuentra en estado: "<<dLectura.message<<endl;
+  }
 
 }
 
-int menu(int opciones, int fdG, int fdC)
+int menu(int opciones, int fdG, int fdC, int id, string pipeC)
 {
-        int i=0;
-        int opcion;
-        datosCliente usuario;
 
-        cout<<"   |-----------------------------------------------------|"<<endl;
-        cout<<"   |====================Tu&tazo Inc.=====================|"<<endl;
-        cout<<"   |Ciao, per favore fate la tua scelta.                 |"<<endl;
-        cout<<"   |1. Seguire un utente                                 |"<<endl;
-        cout<<"   |2. Smetti di seguire un utente                       |"<<endl;
-        cout<<"   |3. Inviare un tweet                                  |"<<endl;
-        if( opciones = 0 )
-                cout<<"   |4. Aggiornare I tweets                               |"<<endl;
-        cout<<"   |0. Esci di Tu&tazo                                   |"<<endl;
-        cout<<"   |-----------------------------------------------------|"<<endl;
-        cout<<"La tua opzione: ";
+  int opcion, c;
+  datosEnvio usuario, lectura;
+  strcpy(usuario.pipename,pipeC.c_str());
 
-        cin>>opcion;
-        cout<<endl;
+  cout<<"   |-----------------------------------------------------|"<<endl;
+  cout<<"   |====================Tu&tazo Inc.=====================|"<<endl;
+  cout<<"   |Ciao, per favore fate la tua scelta.                 |"<<endl;
+  cout<<"   |1. Seguire un utente                                 |"<<endl;
+  cout<<"   |2. Smetti di seguire un utente                       |"<<endl;
+  cout<<"   |3. Inviare un tweet                                  |"<<endl;
+  if( opciones == 0 )
+  cout<<"   |4. Aggiornare I tweets                               |"<<endl;
+  cout<<"   |0. Esci di Tu&tazo                                   |"<<endl;
+  cout<<"   |-----------------------------------------------------|"<<endl;
+  cout<<"La tua opzione: ";
 
-        switch(opcion)
-        {
-        case 0:
-        {       cout<<"--------->Cerrando Sesion...  ";
-                sleep(2);
-                cout<<"100%"<<endl;
-                cout<<"--------->Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
-                return 0; } break;
+  cin>>opcion;
+  cout<<endl;
+  cout<<" ================================================\n";
 
-        case 1:
-        {
-                int ide;
-                /*============================================
-                 *          Follow de un usuario
-                   =============================================*/
-                cout<<"A chi ti piacerebbe seguire?"<<endl;
-                cin>>ide;
-                //Se debe validar que el usuario sea valido y no lo este siguiendo
-                cout<<endl;
+  switch(opcion)
+  {
+    case 0:
+    {       cout<<"--------->Cerrando Sesion...  ";
+    sleep(2);
+    cout<<"100%"<<endl;
+    cout<<"--------->Grazie per usare il nostro servizio. In bocca a lupo!"<<endl;
+  } break;
 
-                return 1;
-        } break;
+  case 1:
+  {
 
-        case 2:
-        {
-                int ide;
-                /*============================================
-                   Unfollow de un usuario
-                   =============================================*/
-                cout<<"A chi ti piacerebbe lasciare di seguire?"<<endl;
-                cin>>ide;
-                // Se debe validar que el usuario sea valido y lo este siguiendo
-                cout<<endl;
+    // Follow-------------------------
+    string ide;
+    cout<<"  A chi ti piacerebbe seguire?\n  - ";
+    cin.ignore();
+    cin>>ide;
+    usuario.id = id;
+    usuario.action=opcion;
+    strcpy(usuario.message, ide.c_str());
+    cout<<"  Peticion enviada al gestor\n";
+    if(write(fdG, &usuario, sizeof(usuario))==-1) {
+      perror("Escritura para seguir usuario:");
+      exit(0);
+    }
 
-                return 2;
-        } break;
+    cout<<"  Esperando respuesta del gestor\n";
+    do {
+      c =  read(fdC, &usuario, sizeof(usuario));
+      sleep(1);
+    } while (c <= 0);
 
-        case 3:
-        {
-                /*============================================
-                   Enviar un Tweet
-                   =============================================*/
-                string input;
-                char caracter;
-
-                do {
-                        cout<<"A cosa stai pensando?"<<endl;
-                        cin.ignore();
-                        getline(cin,input);
-                        if(input.length() <= 140)
-                        {
-                                usuario.tweet.push_back(input);
-                                ++i;
-                                cout<<"Tweet enviado exitosamente!"<<endl;
-                                caracter = 'N';
-                        }
-                        else
-                        {
-                                cout<<endl<<"El tweet es demasiado largo, excede los 140 caracteres."<<endl;
-                                cout<<"Numero de caracteres: "<<input.length()<<endl;
-                                cout << "Si desea cancelar ingrese N, si desea reescribir el tweet ingrese S" <<endl;
-                                cin>>caracter;
-                        }
-                } while(caracter == 'S' || caracter == 's');
-
-                return 3;
-        } break;
-
-        case 4:
-        {
-                if( opciones = 1 ) {
-                        cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
-                        cout<<endl;
-                        return 4;
-                }
-                /*============================================
-                   Recuperar Tweets
-                   =============================================*/
-                cout<<"aggiornare il muro? Y | N"<<endl;
-                //Se valida si el gestor esta en modo sincrono
-
-                return 4;
-        } break;
-
-        default:
-        {
-                cout<<"L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
-                cout<<endl;
-        } break;
+    cout<<"  Respuesta del gestor recibida\n";
+    if(usuario.action == 2)
+    {
+      cout<<"  - El usuario al que esta intentando seguir ya lo sigue actualmente."<<endl;
+    }
+    else if(usuario.action == 3)
+    {
+      cout<<"  - Debe ingresar un cliente valido entre 1 y 10."<<endl<<"Intente de nuevo..."<<endl;
+    }
+    else{
+      cout<<"  - Ahora estas siguiendo al usuario: "<<ide<<endl;
+    }
 
 
-        }
+  } break;
 
-        return opcion;
+  case 2:
+  {
+    /*============================================
+    Unfollow de un usuario
+    =============================================*/
+    int c;
+    string ide;
+    cin.ignore();
+    cout<<"A chi ti piacerebbe lasciare di seguire?\n  - ";
+    cin>>ide;
+
+    usuario.id = id;
+    usuario.action=opcion;
+    strcpy(usuario.message, ide.c_str());
+    if(write(fdG, &usuario, sizeof(usuario))==-1) {
+      perror("Escritura para dejar de seguir usuario:");
+      exit(0);
+    }
+    do {
+      c =  read(fdC, &usuario, sizeof(usuario));
+      sleep(1);
+    } while (c <= 0);
+    if(usuario.action == 2)
+    {
+      cout<<"El usuario al que esta intentando dejar seguir no lo seguia."<<endl;
+    }
+    else if(usuario.action == 3)
+    {
+      cout<<"Debe ingresar un cliente valido entre 1 y 10."<<endl<<"Intente de nuevo."<<endl;
+    }
+    else{
+      cout<<"Dejaste de seguir al usuario: "<<ide<<endl;
+    }
+
+  } break;
+  case 3:
+  {
+    /*============================================
+    Enviar un Tweet
+    =============================================*/
+    string input;
+    char letter;
+    do{
+      cout<<"  A cosa stai pensando?\n  - ";
+      cin.ignore();
+      getline(cin,input);
+      usuario.id=id;
+      usuario.action=opcion;
+      strcpy(usuario.message,input.c_str());
+      cout<<"  Enviando el tu&tazo a gestor \n";
+      if(write(fdG, &usuario, sizeof(usuario))==-1) {
+        perror("Escritura de Tu&Tazo:");
+        exit(0);
+      }
+
+      do {
+        c =  read(fdC, &lectura, sizeof(lectura));
+        sleep(1);
+      } while (c <= 0);
+      cout<<"  "<<lectura.message;
+      if(lectura.action)
+      letter='N';
+      else{
+        cin>>letter;
+      }
+
+    }while(letter=='S');
+  } break;
+
+  case 4:
+  {
+    if( opciones == 1 ) {
+      cout<<"  L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
+      cout<<endl;
+      break;
+    }
+    cout<<"  Actualizando mensajes\n";
+    usuario.id=id;
+    usuario.action=opcion;
+    cout<<"*  Escribiendo al gestor\n";
+    if(write(fdG, &usuario, sizeof(usuario))==-1) {
+      perror("Escritura de Tu&Tazo:");
+      exit(0);
+    }
+    cout<<"  Recopilando los Tu&T's\n";
+    do{
+      do {
+        c =  read(fdC, &lectura, sizeof(lectura));
+        sleep(1);
+      } while (c <= 0);
+      if(lectura.action){
+        cout<<"  Tu&T entrante:"<<lectura.id<<"\n  ";
+        cout<<lectura.message<<endl;
+      }
+    }while (lectura.action) ;
+
+  } break;
+
+  default:
+  {
+    cout<<"  L'opzione è sbagliato, per favore scegliere una delle opzioni del menu."<<endl;
+    cout<<endl;
+  } break;
+
+
+}
+cout<<" ================================================\n";
+return opcion;
 }
 
 int main(int argc, char **argv)
 {
-        int pipeG, pipeC, creado=0;
-        int argv1,opciones = 0, temp;
-        argv1=atoi(argv[1]);
-        string nompipeGC;
+  int pipeG, pipeC, creado=0;
+  int argv1,opciones = 0, temp;
+  argv1=atoi(argv[1]);
+  string nompipeGC;
 
-        mode_t fifo_mode = S_IRUSR | S_IWUSR;
+  mode_t fifo_mode = S_IRUSR | S_IWUSR;
 
-        /*=============================================
-           Verificación de parámetros correctos
-           ===============================================*/
-        if(argc!=3)
-        {
-                cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
-                exit(0);
-        }
-        /*============================================
-           VERIFICACION USUARIO:  Se verifica si el id es valido
-           =============================================*/
+  /*=============================================
+  Verificación de parámetros correctos
+  ===============================================*/
+  if(argc!=3)
+  {
+    cout<<"Formato incorrecto. Ingrese de la siguiente manera: [$Cliente] [id] [pipenom]"<<endl;
+    exit(0);
+  }
+  /*============================================
+  VERIFICACION USUARIO:  Se verifica si el id es valido
+  =============================================*/
 
-        if(argv1< 1 || argv1> 10)
-        {
-                cout << "No es posible conectarse con el id que indica, Por favor ingrese un numero entre 1 y 10." <<endl;
-                exit(0);
-        }
-        /*============================================
-           Creacion de pipes
-           =============================================*/
-        // Pipe gestor
-        do {
-                pipeG = open (argv[2], O_WRONLY);
-                if(pipeG == -1) {
-                        perror("pipe");
-                        printf(" Se volvera a intentar despues\n");
-                        sleep(5);
-                }
-                else creado=1;
-        } while(creado == 0);
+  if(argv1< 1 || argv1> 10)
+  {
+    cout << "No es posible conectarse con el id que indica, Por favor ingrese un numero entre 1 y 10." <<endl;
+    exit(0);
+  }
+  /*============================================
+  Creacion de pipes
+  =============================================*/
+  // Pipe gestor
+  do {
+    pipeG = open (argv[2], O_WRONLY);
+    if(pipeG == -1) {
+      perror("pipe");
+      printf(" Se volvera a intentar despues\n");
+      sleep(5);
+    }
+    else creado=1;
+  } while(creado == 0);
 
+  //Pipe Cliente
+  nompipeGC = argv[2];
+  nompipeGC += (argv[1]);
 
-        nompipeGC = argv[2];
-        nompipeGC += (argv[1]);
+  unlink(nompipeGC.c_str());
 
-        unlink(nompipeGC.c_str());
+  if (mkfifo (nompipeGC.c_str(), fifo_mode) == -1) {
+    perror("cliente mkfifo");
+    exit(1);
+  }
 
-        if (mkfifo (nompipeGC.c_str(), fifo_mode) == -1) {
-                perror("cliente mkfifo");
-                exit(1);
-        }
+  if ((pipeC = open(nompipeGC.c_str(), O_RDONLY|O_NONBLOCK)) == -1) {
+    perror("Cliente abriendo el segundo pipe");
+    exit(0);
+  }
 
-        if ((pipeC = open(nompipeGC.c_str(), O_RDONLY|O_NONBLOCK)) == -1) {
-                perror("Cliente abriendo el segundo pipe");
-                exit(0);
-        }
+  /*============================================
+  Operaciones cliente
+  =============================================*/
 
-        /*============================================
-           Operaciones cliente
-           =============================================*/
+  inicioSesion(atoi(argv[1]),pipeG,pipeC,nompipeGC);
 
-        inicioSesion(atoi(argv[1]),pipeG,pipeC,nompipeGC);
+  do {
+    temp = menu(opciones, pipeG, pipeC, argv1,nompipeGC);
+    cout << "Presione enter para continuar del programa: ";
+    cin.ignore().get();
+    system("clear");
 
-        do {
-                temp = menu(opciones, pipeG, pipeC);
-                sleep(2);
-        } while(temp != 0);
-        //close(fd);
+  } while(temp != 0);
+  close(pipeC);
 
-        return 0;
+  return 0;
 }
