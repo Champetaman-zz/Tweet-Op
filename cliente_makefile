@@ -1,0 +1,15 @@
+# PROYECTO #2 - Makefile Mini-Twitter
+# 
+#   Camilo Oviedo
+#   Oscar Moreno
+
+all: cliente
+
+cliente: Cliente.o
+	g++ Cliente.o -o cliente
+
+
+Cliente.o: Cliente.cpp
+	g++ -c Cliente.cpp 
+
+clean: rm *o cliente

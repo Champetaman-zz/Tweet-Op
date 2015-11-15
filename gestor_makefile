@@ -1,0 +1,15 @@
+# PROYECTO #2 - Makefile Mini-Twitter
+# 
+#   Camilo Oviedo
+#   Oscar Moreno
+
+all: gestor
+
+gestor: Gestor.o
+	gcc Gestor.o -o gestor
+
+
+Gestor.o: Gestor.cpp
+	gcc -c Gestor.cpp 
+
+clean: rm *o gestor
