@@ -13,7 +13,7 @@ sighandler_t signalHandler (void)
         sleep(5);
         datosEnvio lectura;
         read(aux, &lectura, sizeof(lectura));
-        cout<<"--------------------------------------------------------------------------------"<<endl;
+        cout<<"\n--------------------------------------------------------------------------------"<<endl;
         cout<<"\n    Tu&T entrante:"<<lectura.id<<"\n  ";
         cout<<lectura.message<<endl;
         cout<<"--------------------------------------------------------------------------------"<<endl;
@@ -209,8 +209,11 @@ int menu( int fdG, int fdC, int id, string pipeC)
                                 sleep(1);
                         } while (c <= 0);
                         cout<<"    "<<lectura.message;
-                        if(lectura.action)
+                        if(lectura.action){
+                          cout<<"    Tu&T entrante:"<<id<<"\n  ";
+                          cout<<input<<endl;
                                 letter='N';
+                              }
                         else{
                                 cin>>letter;
                         }
