@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <signal.h>
 #include <unistd.h>
 #include <iostream>
 #include <map>
@@ -15,8 +14,10 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <signal.h>
 
 using namespace std;
+
 
 /*===========================================
  *  Estructura DATOSCLIENTE
